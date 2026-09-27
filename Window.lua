@@ -623,8 +623,17 @@ local function drawDropdowns()
     dropDownGroup:AddChild(spacerLeft)
 
     classDropdown = AceGUI:Create("Dropdown")
+    classDropdown:SetWidth(110)
+    classDropdown:SetPulloutWidth(113)
+
     specDropdown = AceGUI:Create("Dropdown")
+    specDropdown:SetWidth(180)
+    specDropdown:SetPulloutWidth(183)
+
     phaseDropDown = AceGUI:Create("Dropdown")
+    phaseDropDown:SetWidth(70)
+    phaseDropDown:SetPulloutWidth(73)
+
     specDropdown:SetDisabled(true)
 
     phaseDropDown:SetCallback("OnValueChanged", function(_, _, key)
