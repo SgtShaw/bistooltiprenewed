@@ -547,9 +547,25 @@ local function drawSpecData()
     end
 
     wipe(displayed_item_widgets)
-    wipe(missing_widgets)
-    wipe(fetch_attempts)
-    item_fetch_frame:SetScript("OnUpdate", nil)
+
+    if not (favorites_frame and favorites_frame.frame and favorites_frame.frame:IsShown()) then
+        wipe(missing_widgets)
+        wipe(fetch_attempts)
+        item_fetch_frame:SetScript("OnUpdate", nil)
+    else
+        for itemID, widgets in pairs(missing_widgets) do
+            for j = #widgets, 1, -1 do
+                local w = widgets[j]
+                if not (w and w.frame and w.frame:IsShown()) then
+                    table.remove(widgets, j)
+                end
+            end
+            if #widgets == 0 then
+                missing_widgets[itemID] = nil
+                fetch_attempts[itemID] = nil
+            end
+        end
+    end
 
     spec_frame:ReleaseChildren()
     drawTableHeader(spec_frame)
