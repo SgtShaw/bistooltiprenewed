@@ -745,19 +745,26 @@ function BisTooltipAddon:RefreshFavoritesWindow()
         end)
 
         for _, itemID in ipairs(favList) do
+            local display_id = itemID
+            if IsPlayerHorde() and BisTooltip_AliToHorde and BisTooltip_AliToHorde[itemID] then
+                display_id = BisTooltip_AliToHorde[itemID]
+            elseif not IsPlayerHorde() and BisTooltip_FactionMap and BisTooltip_FactionMap[itemID] then
+                display_id = BisTooltip_FactionMap[itemID]
+            end
+
             local row = AceGUI:Create("SimpleGroup")
             row:SetLayout("Table")
             row:SetFullWidth(true)
             row:SetUserData("table", { columns = {42, 330, 26}, space = 4, align = "middle" })
 
-            local itemWidget = createItemFrame(itemID, 36)
+            local itemWidget = createItemFrame(display_id, 36)
             local entry = table.remove(fav_widget_pool) or {}
             entry.widget = itemWidget
-            entry.item_id = itemID
+            entry.item_id = display_id
             displayed_fav_widgets[#displayed_fav_widgets + 1] = entry
             row:AddChild(itemWidget)
 
-            local itemName, _, itemRarity, _, _, _, itemSubType, _, equipSlot = GetItemInfo(itemID)
+            local itemName, _, itemRarity, _, _, _, itemSubType, _, equipSlot = GetItemInfo(display_id)
             local infoGroup = AceGUI:Create("SimpleGroup")
             infoGroup:SetLayout("List")
             infoGroup:SetWidth(330)
@@ -768,7 +775,7 @@ function BisTooltipAddon:RefreshFavoritesWindow()
                 nameLabel:SetText(itemName)
                 nameLabel:SetColor(r, g, b)
             else
-                nameLabel:SetText("Item #" .. itemID)
+                nameLabel:SetText("Item #" .. display_id)
                 nameLabel:SetColor(0.75, 0.75, 0.75)
             end
             nameLabel:SetFont("Fonts\\FRIZQT__.TTF", 13, "")
@@ -778,15 +785,15 @@ function BisTooltipAddon:RefreshFavoritesWindow()
             nameLabel:SetHeight(nameHeight)
 
             nameLabel:SetCallback("OnClick", function()
-                local _, link = GetItemInfo(itemID)
-                local validLink = link or ("item:" .. itemID .. ":0:0:0:0:0:0:0")
+                local _, link = GetItemInfo(display_id)
+                local validLink = link or ("item:" .. display_id .. ":0:0:0:0:0:0:0")
                 if IsModifiedClick() then
                     HandleModifiedItemClick(validLink)
                 else
                     SetItemRef(validLink, validLink, "LeftButton")
                 end
             end)
-            nameLabel:SetCallback("OnEnter", function(widget) HandleItemTooltip(widget, itemID) end)
+            nameLabel:SetCallback("OnEnter", function(widget) HandleItemTooltip(widget, display_id) end)
             nameLabel:SetCallback("OnLeave", function() GameTooltip:Hide() end)
             infoGroup:AddChild(nameLabel)
 
