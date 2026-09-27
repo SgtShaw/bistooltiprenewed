@@ -583,7 +583,7 @@ local function buildSpecsDict(class_i)
     local class_data = BisTooltip_ClassData[class_i]
     for si, spec_name in ipairs(class_data.specs) do
         local icon = BisTooltip_SpecIcons[class_data.name] and BisTooltip_SpecIcons[class_data.name][spec_name]
-        local iconStr = icon and ("|T" .. icon .. ":14|t ") or ""
+        local iconStr = icon and ("|T" .. icon .. ":14:14:0:0|t ") or ""
         local option_name = iconStr .. spec_name
 
         table.insert(spec_options, option_name)
