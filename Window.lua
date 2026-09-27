@@ -875,6 +875,9 @@ function BisTooltipAddon:OpenFavoritesFrame()
 
         favorites_frame.frame:HookScript("OnHide", function()
             StaticPopup_Hide("BISTOOLTIP_CONFIRM_CLEAR_FAVORITES")
+            if not (main_frame and main_frame.frame and main_frame.frame:IsShown()) then
+                item_fetch_frame:SetScript("OnUpdate", nil)
+            end
         end)
 
         hooksecurefunc(favorites_frame.frame, "StopMovingOrSizing", function(self)
@@ -1034,8 +1037,8 @@ function BisTooltipAddon:createMainFrame()
     end
 
     main_frame.frame:HookScript("OnHide", function()
-        item_fetch_frame:SetScript("OnUpdate", nil)
         if not (favorites_frame and favorites_frame.frame and favorites_frame.frame:IsShown()) then
+            item_fetch_frame:SetScript("OnUpdate", nil)
             StaticPopup_Hide("BISTOOLTIP_CONFIRM_CLEAR_FAVORITES")
         end
     end)
@@ -1151,10 +1154,10 @@ end
 
 function BisTooltipAddon:closeMainFrame()
     if not (favorites_frame and favorites_frame.frame and favorites_frame.frame:IsShown()) then
+        item_fetch_frame:SetScript("OnUpdate", nil)
         StaticPopup_Hide("BISTOOLTIP_CONFIRM_CLEAR_FAVORITES")
     end
     if main_frame and main_frame.frame:IsShown() then
-        item_fetch_frame:SetScript("OnUpdate", nil)
         main_frame:Hide()
     end
 end
